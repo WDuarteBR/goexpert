@@ -1,0 +1,38 @@
+TEST
+- Para executar os testes usa-se o comando:
+	go test .
+
+- Obs.: o "." acima é caso esteja no diretório dos arquivos de teste
+
+- Para ter mais informações dos testes, passe a opção -v
+	go test -v .
+
+- Para exibir a cobertura dos teste passe o seguinte argumento:
+	go test -coverprofile=coverage.out
+
+- Para exibir os detalhes do arquivo coverage.out, execute o comando:
+	go tool cover -html=coverage.out
+
+
+BENCHMARK
+- Para executar o benchmark :
+	go test -bench=.
+
+- Para executar apenas o benchmark :
+	go test -bench=. -run=^#
+
+- Para executar o benchmark por n vezes
+	go test -bench=. -count=n
+
+- Para limitar o tempo de execução, por exemplo: 3 segundos
+	go test -bench=. -benchtime=3s
+
+- Para exibir a alocação de memória :
+	go test -bench=. -benchmem
+
+FUZZY
+- Para executar o fuzzy:
+	go test -fuzz=.
+
+- Para executar apenas o fuzzy:
+	go test -fuzz=. -run=^#

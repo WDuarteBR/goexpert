@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ template "header.html" }}
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Cursos</th>
+                <th>Carga Horária</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range . }}
+                {{if gt .Carga 40 }}
+                    <tr>
+                        <td>{{ .Nome | Tobig }}</td>
+                        <td>{{ .Carga }}</td>
+                    </tr>
+                {{ end }}
+            {{ end }}
+        </tbody>
+    </table>
+</body>
+{{ template "footer.html" }}
+</html>
