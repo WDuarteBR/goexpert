@@ -34,9 +34,10 @@ func main() {
 	productHandler := handlers.NewProductHandler(productDB)
 
 	r.Post("/product", productHandler.CreateProduct)
+	r.Get("/products", productHandler.AllProducts)
 	r.Get("/product/{id}", productHandler.GetProduct)
 	r.Put("/product/{id}", productHandler.UpdateProduct)
+	r.Delete("/product/{id}", productHandler.DeleteProduct)
 	http.ListenAndServe(":8000", r)
 
-	// 5b5f540a-3b11-4f70-9ec2-b9579a1d61c2
 }
