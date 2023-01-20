@@ -27,6 +27,9 @@ func main() {
 	}
 
 	db.AutoMigrate(&entity.User{}, &entity.Product{})
+	productDB := database.NewProduct(db)
+	productHandler := NewProductHandler(productDB)
+	http.HandleFunc("/product", productHandler.CreateProduct)
 
 	http.ListenAndServe(":8000", nil)
 
