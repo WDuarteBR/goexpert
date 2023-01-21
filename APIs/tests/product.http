@@ -1,0 +1,32 @@
+POST http://localhost:8000/product HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Product with logger",
+  "price": 10.0
+}
+
+###
+
+GET https://localhost:8000/product/5b5f540a-3b11-4f70-9ec2-b9579a1d61c2 HTTP/1.1
+
+###
+
+PUT http://localhost:8000/product/5b5f540a-3b11-4f70-9ec2-b9579a1d61c2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Product verified",
+  "price": 50.00
+}
+
+###
+
+DELETE http://localhost:8000/product/5b5f540a-3b11-4f70-9ec2-b9579a1d61c2 HTTP/1.1
+
+###
+
+GET http://localhost:8000/products HTTP/1.1
+
+
+
