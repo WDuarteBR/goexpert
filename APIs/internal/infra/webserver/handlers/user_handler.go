@@ -13,6 +13,10 @@ import (
 	"github.com/wduartebr/goexpert/apis/internal/infra/database"
 )
 
+type Error struct {
+	Message string `json:"message"`
+}
+
 type UserHandler struct {
 	UserDB database.UserInterface
 }
@@ -62,6 +66,16 @@ func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Create user godoc
+// @Summary 		Create User
+// @Description 	Create User
+// @Tags 			users
+// @Accept 			json
+// @Produce 		json
+// @Param 			request 	body	dto.CreateUserInput	true	"user request"
+// @Success			201
+// @Failure			500			{object}	Error
+// @Router			/user		[post]
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user dto.CreateUserInput
 
@@ -74,12 +88,16 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	u, err := entity.NewUser(user.Name, user.Email, user.Password)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 
 	err = h.UserDB.CreateUser(u)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 
