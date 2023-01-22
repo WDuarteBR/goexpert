@@ -27,6 +27,6 @@ DELETE http://localhost:8000/product/5b5f540a-3b11-4f70-9ec2-b9579a1d61c2 HTTP/1
 ###
 
 GET http://localhost:8000/product/all HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzQzODY1NDEsInN1YiI6ImU4NTgzODk0LWQzNTYtNDAyMi1hNWZiLTkzMjg2MzYwNmNkZSJ9.S0RfxpA43TkYcWMUFeE1Dd81DOpKs3cadgdZYVkL8-o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzQzODgyNDAsInN1YiI6ImU4NTgzODk0LWQzNTYtNDAyMi1hNWZiLTkzMjg2MzYwNmNkZSJ9.jWKKPM5uyJxDzDGCjnWfJkyF9mIV8Ut0i_9vae8L3H4
 
 
