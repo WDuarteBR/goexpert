@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/jwtauth"
 
+	_ "github.com/wduartebr/goexpert/apis/docs"
 	"github.com/wduartebr/goexpert/apis/internal/infra/database"
 	"github.com/wduartebr/goexpert/apis/internal/infra/webserver/handlers"
 
@@ -12,10 +13,26 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/wduartebr/goexpert/apis/configs"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+// @title Go Expert API Exercise
+// @version 1.0
+// @description Product API with authentication
+// @termOfService http://swagger.io/terms/
+
+// @contact.name W. Duarte
+// @contact.url http://aindafarei.com.br
+// @contact.mail wduarte.br@gmail.com
+
+// @host localhost:8000
+// @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 
@@ -55,6 +72,7 @@ func main() {
 
 	r.Post("/user", userHandler.CreateUser)
 	r.Post("/user/gen_token", userHandler.GetJWT)
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	http.ListenAndServe(":8000", r)
 

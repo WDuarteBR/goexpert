@@ -1,0 +1,16 @@
+basePath: /
+host: localhost:8000
+info:
+  contact:
+    name: W. Duarte
+    url: http://aindafarei.com.br
+  description: Product API with authentication
+  title: Go Expert API Exercise
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
