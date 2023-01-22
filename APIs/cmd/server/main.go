@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	"github.com/go-chi/jwtauth"
+
 	"github.com/wduartebr/goexpert/apis/internal/infra/database"
 	"github.com/wduartebr/goexpert/apis/internal/infra/webserver/handlers"
 
@@ -37,11 +39,16 @@ func main() {
 	productHandler := handlers.NewProductHandler(productDB)
 	userHandler := handlers.NewUserHandler(userDB, config.TokenAuth, config.JWTExperesIn)
 
-	r.Post("/product", productHandler.CreateProduct)
-	r.Get("/products", productHandler.AllProducts)
-	r.Get("/product/{id}", productHandler.GetProduct)
-	r.Put("/product/{id}", productHandler.UpdateProduct)
-	r.Delete("/product/{id}", productHandler.DeleteProduct)
+	r.Route("/product", func(r chi.Router) {
+		r.Use(jwtauth.Verifier(config.TokenAuth))
+		r.Use(jwtauth.Authenticator)
+		r.Post("/", productHandler.CreateProduct)
+		r.Get("/all", productHandler.AllProducts)
+		r.Get("/{id}", productHandler.GetProduct)
+		r.Put("/{id}", productHandler.UpdateProduct)
+		r.Delete("/{id}", productHandler.DeleteProduct)
+
+	})
 
 	r.Post("/user", userHandler.CreateUser)
 	r.Post("/user/gen_token", userHandler.GetJWT)
