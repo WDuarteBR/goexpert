@@ -54,3 +54,19 @@ func (ed *EventDispatcher) Dispatche(event EventInterface) error {
 	}
 	return nil
 }
+
+func (ed *EventDispatcher) Remove(eventName string, handler EventHandlerInterface) error {
+	if _, ok := ed.handlers[eventName]; ok {
+		for i, h := range ed.handlers[eventName] {
+			if h == handler {
+				ed.handlers[eventName] = append(ed.handlers[eventName][:i], ed.handlers[eventName][i+1:]...)
+				// na lógica dentro do append temos:
+				// ed.handlers[eventName][:i] => o próprio handler a ser removido
+				// ed.handlers[eventName][i+1:] => com excessão do próprio acrescenta todo o resto
+				// ... => indica que dé uma adição de slices
+
+			}
+		}
+	}
+	return nil
+}
