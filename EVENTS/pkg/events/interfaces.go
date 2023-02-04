@@ -1,6 +1,9 @@
 package events
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 // O evento em si, ou seja,
 // quem carrega os dados
@@ -13,7 +16,7 @@ type EventInterface interface {
 // É quem executa as operações quando
 // o vevento é chamado
 type EventHandlerInterface interface {
-	Handle(event EventInterface)
+	Handle(event EventInterface, wg *sync.WaitGroup)
 }
 
 // É quem gerencia os eventos/operações
