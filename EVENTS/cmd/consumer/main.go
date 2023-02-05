@@ -17,7 +17,7 @@ func main() {
 
 	msgs := make(chan amqp.Delivery)
 
-	go rabbitmq.Consume(ch, msgs)
+	go rabbitmq.Consume(ch, msgs, "orders")
 
 	for msg := range msgs {
 		fmt.Println(string(msg.Body))
