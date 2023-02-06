@@ -20,7 +20,7 @@ func NewCategory(db *sql.DB) *Category {
 func (c *Category) Create(name string, description string) (Category, error) {
 	id := uuid.New().String()
 
-	_, err := c.db.Exec("insert into categories(id, name, description) values (1$, 2$, 3$)",
+	_, err := c.db.Exec("insert into categories(id, name, description) values ($1, $2, $3)",
 		id, name, description)
 
 	if err != nil {
