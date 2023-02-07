@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/wduartebr/goexpert/graphql/graph/model"
 )
@@ -26,7 +25,16 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 
 // CreateCourse is the resolver for the createCourse field.
 func (r *mutationResolver) CreateCourse(ctx context.Context, input model.NewCourse) (*model.Course, error) {
-	panic(fmt.Errorf("not implemented: CreateCourse - createCourse"))
+	course, err := r.CourseDB.Create(input.Name, input.Description)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Course{
+		ID:          course.Id,
+		Name:        course.Name,
+		Description: course.Description,
+	}, nil
 }
 
 // Categories is the resolver for the categories field.
@@ -48,7 +56,22 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 
 // Courses is the resolver for the courses field.
 func (r *queryResolver) Courses(ctx context.Context) ([]*model.Course, error) {
-	panic(fmt.Errorf("not implemented: Courses - courses"))
+	courses, err := r.CourseDB.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var couModel []*model.Course
+	for _, course := range courses {
+		couModel = append(couModel, &model.Course{
+			ID:          course.Id,
+			Name:        course.Name,
+			Description: course.Description,
+		})
+	}
+
+	return couModel, nil
+
 }
 
 // Mutation returns MutationResolver implementation.

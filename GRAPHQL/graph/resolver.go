@@ -6,4 +6,5 @@ import (
 
 type Resolver struct {
 	CategoryDB *database.Category
+	CourseDB   *database.Courses
 }
