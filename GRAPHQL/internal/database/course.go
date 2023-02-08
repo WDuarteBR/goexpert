@@ -7,7 +7,7 @@ import (
 )
 
 type Courses struct {
-	Db          *sql.DB
+	db          *sql.DB
 	Id          string
 	Name        string
 	Description string
@@ -15,12 +15,12 @@ type Courses struct {
 }
 
 func NewCourse(db *sql.DB) *Courses {
-	return &Courses{Db: db}
+	return &Courses{db: db}
 }
 
 func (c *Courses) Create(name, description, category_id string) (Courses, error) {
 	id := uuid.New().String()
-	_, err := c.Db.Exec("insert into Courses(id, name, description, category_id) values($1, $2, $3, $4)",
+	_, err := c.db.Exec("insert into Courses(id, name, description, category_id) values($1, $2, $3, $4)",
 		id, name, description, category_id)
 	if err != nil {
 		return Courses{}, err
@@ -36,7 +36,7 @@ func (c *Courses) Create(name, description, category_id string) (Courses, error)
 }
 
 func (c *Courses) FindAll() ([]Courses, error) {
-	rows, err := c.Db.Query("select id, name, description, category_id from Courses")
+	rows, err := c.db.Query("select id, name, description, category_id from Courses")
 	if err != nil {
 		return nil, err
 	}
@@ -59,4 +59,28 @@ func (c *Courses) FindAll() ([]Courses, error) {
 	}
 
 	return courses, nil
+}
+
+func (c *Courses) FindByCategoryId(categoryId string) ([]Courses, error) {
+	rows, err := c.db.Query("select id, name, description, category_id from Courses where category_id = $1", categoryId)
+	if err != nil {
+		return nil, err
+	}
+
+	var courses []Courses
+	for rows.Next() {
+		var id, name, description, category string
+		err = rows.Scan(&id, &name, &description, &category)
+		if err != nil {
+			return nil, err
+		}
+		courses = append(courses, Courses{
+			Id:          id,
+			Name:        name,
+			Description: description,
+			Category_Id: category,
+		})
+	}
+	return courses, nil
+
 }
