@@ -18,9 +18,10 @@ func NewCourse(db *sql.DB) *Courses {
 	return &Courses{Db: db}
 }
 
-func (c *Courses) Create(name string, description string) (Courses, error) {
+func (c *Courses) Create(name, description, category_id string) (Courses, error) {
 	id := uuid.New().String()
-	_, err := c.Db.Exec("insert into Courses(id, name, description) values($1, $2, $3)", id, name, description)
+	_, err := c.Db.Exec("insert into Courses(id, name, description, category_id) values($1, $2, $3, $4)",
+		id, name, description, category_id)
 	if err != nil {
 		return Courses{}, err
 	}
@@ -29,12 +30,13 @@ func (c *Courses) Create(name string, description string) (Courses, error) {
 		Id:          id,
 		Name:        name,
 		Description: description,
+		Category_Id: category_id,
 	}, nil
 
 }
 
 func (c *Courses) FindAll() ([]Courses, error) {
-	rows, err := c.Db.Query("select id, name description from Courses")
+	rows, err := c.Db.Query("select id, name, description, category_id from Courses")
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +44,8 @@ func (c *Courses) FindAll() ([]Courses, error) {
 	var courses []Courses
 
 	for rows.Next() {
-		var id, name, description string
-		err = rows.Scan(&id, &name, &description)
+		var id, name, description, category string
+		err = rows.Scan(&id, &name, &description, &category)
 		if err != nil {
 			return nil, err
 		}
@@ -52,6 +54,7 @@ func (c *Courses) FindAll() ([]Courses, error) {
 			Id:          id,
 			Name:        name,
 			Description: description,
+			Category_Id: category,
 		})
 	}
 

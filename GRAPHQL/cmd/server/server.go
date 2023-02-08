@@ -25,6 +25,7 @@ func main() {
 
 	categoryDB := database.NewCategory(db)
 	courseDB := database.NewCourse(db)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort

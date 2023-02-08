@@ -20,7 +20,7 @@ input NewCategory{
 input newCourse{
   name: String!
   description: String!
-  Category:ID!
+  category:ID!
 }
 
 type Query{
