@@ -51,3 +51,27 @@ func (c *Category) FindAll() ([]Category, error) {
 
 	return categories, nil
 }
+
+func (c *Category) FindByCourse(course_id string) (Category, error) {
+	strSql := "select ct.id, ct.name, ct.description from courses cr join categories ct on ct.id = cr.category_id where cr.id = $1"
+	row, err := c.db.Query(strSql, course_id)
+	if err != nil {
+		return Category{}, err
+	}
+
+	defer row.Close()
+	var cat_id, name, description string
+	for row.Next() {
+		err = row.Scan(&cat_id, &name, &description)
+		if err != nil {
+			return Category{}, err
+		}
+	}
+
+	return Category{
+		Id:          cat_id,
+		Name:        name,
+		Description: description,
+	}, nil
+
+}
