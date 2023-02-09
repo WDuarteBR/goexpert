@@ -41,6 +41,7 @@ func (c *Courses) FindAll() ([]Courses, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
 	var courses []Courses
 
 	for rows.Next() {
@@ -67,6 +68,7 @@ func (c *Courses) FindByCategoryId(categoryId string) ([]Courses, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
 	var courses []Courses
 	for rows.Next() {
 		var id, name, description, category string

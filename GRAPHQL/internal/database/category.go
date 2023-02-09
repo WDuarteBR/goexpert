@@ -37,7 +37,7 @@ func (c *Category) FindAll() ([]Category, error) {
 		return nil, err
 	}
 
-	defer c.db.Close()
+	defer rows.Close()
 
 	var categories []Category
 

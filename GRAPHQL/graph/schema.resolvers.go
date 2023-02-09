@@ -17,16 +17,15 @@ func (r *categoryResolver) Courses(ctx context.Context, obj *model.Category) ([]
 		return nil, err
 	}
 
-	var modelCourses []*model.Course
+	var modCourses []*model.Course
 	for _, course := range courses {
-		modelCourses = append(modelCourses, &model.Course{
+		modCourses = append(modCourses, &model.Course{
 			ID:          course.Id,
 			Name:        course.Name,
 			Description: course.Description,
 		})
 	}
-
-	return modelCourses, nil
+	return modCourses, nil
 }
 
 // CreateCategory is the resolver for the createCategory field.
