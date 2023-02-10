@@ -75,3 +75,25 @@ func (c *Category) FindByCourse(course_id string) (Category, error) {
 	}, nil
 
 }
+
+func (c *Category) FindById(category_id string) (Category, error) {
+	row, err := c.db.Query("select id, name, description from categories where id = $1", category_id)
+	if err != nil {
+		return Category{}, err
+	}
+
+	defer row.Close()
+
+	var id, name, desc string
+	for row.Next() {
+		if err := row.Scan(&id, &name, &desc); err != nil {
+			return Category{}, err
+		}
+	}
+
+	return Category{
+		Id:          id,
+		Name:        name,
+		Description: desc,
+	}, nil
+}
