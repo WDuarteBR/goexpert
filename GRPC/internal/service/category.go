@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"io"
 
 	"github.com/wduartebr/goexpert/grpc/internal/database"
 	"github.com/wduartebr/goexpert/grpc/internal/pb"
@@ -64,4 +65,25 @@ func (c *CategoryService) GetCategory(ctx context.Context, in *pb.GetCategoryReq
 	}
 
 	return category, nil
+}
+
+func (c *CategoryService) CreateCategoryStream(stream pb.CategoryService_CreateCategoryStreamServer) error {
+	categoiries := &pb.CategoryList{}
+	for {
+		category, err := stream.Recv()
+		if err == io.EOF {
+			return stream.SendAndClose(categoiries)
+		}
+		if err != nil {
+			return err
+		}
+		cat, err := c.CategoryDB.Create(category.Name, category.Description)
+		if err != nil {
+			return err
+		}
+
+		categoiries.Categories = append(categoiries.Categories, &pb.Category{Id: cat.Id,
+			Name:        cat.Name,
+			Description: cat.Description})
+	}
 }
