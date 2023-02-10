@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net"
 
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/wduartebr/goexpert/grpc/internal/database"
 	"github.com/wduartebr/goexpert/grpc/internal/pb"
 	"github.com/wduartebr/goexpert/grpc/internal/service"
@@ -24,7 +25,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()                               // criei um servidor
 	pb.RegisterCategorySeviceServer(grpcServer, categoryService) // anexando o servico ao servidor
-	reflection.Register(grpcServer)                              // aqui fiz esse refection para realizar testes
+	reflection.Register(grpcServer)                              // aqui fiz esse refection para realizar testes com evans
 
 	list, err := net.Listen("tcp", ":50051") // criando uma porta tcp
 	if err != nil {
