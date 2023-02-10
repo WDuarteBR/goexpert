@@ -18,86 +18,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CategorySeviceClient is the client API for CategorySevice service.
+// CategoryServiceClient is the client API for CategoryService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CategorySeviceClient interface {
+type CategoryServiceClient interface {
 	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*Category, error)
+	ListCategory(ctx context.Context, in *Blank, opts ...grpc.CallOption) (*CategoryList, error)
 }
 
-type categorySeviceClient struct {
+type categoryServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCategorySeviceClient(cc grpc.ClientConnInterface) CategorySeviceClient {
-	return &categorySeviceClient{cc}
+func NewCategoryServiceClient(cc grpc.ClientConnInterface) CategoryServiceClient {
+	return &categoryServiceClient{cc}
 }
 
-func (c *categorySeviceClient) CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*Category, error) {
+func (c *categoryServiceClient) CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*Category, error) {
 	out := new(Category)
-	err := c.cc.Invoke(ctx, "/pb.CategorySevice/CreateCategory", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.CategoryService/CreateCategory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CategorySeviceServer is the server API for CategorySevice service.
-// All implementations must embed UnimplementedCategorySeviceServer
+func (c *categoryServiceClient) ListCategory(ctx context.Context, in *Blank, opts ...grpc.CallOption) (*CategoryList, error) {
+	out := new(CategoryList)
+	err := c.cc.Invoke(ctx, "/pb.CategoryService/ListCategory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CategoryServiceServer is the server API for CategoryService service.
+// All implementations must embed UnimplementedCategoryServiceServer
 // for forward compatibility
-type CategorySeviceServer interface {
+type CategoryServiceServer interface {
 	CreateCategory(context.Context, *CreateCategoryRequest) (*Category, error)
-	mustEmbedUnimplementedCategorySeviceServer()
+	ListCategory(context.Context, *Blank) (*CategoryList, error)
+	mustEmbedUnimplementedCategoryServiceServer()
 }
 
-// UnimplementedCategorySeviceServer must be embedded to have forward compatible implementations.
-type UnimplementedCategorySeviceServer struct {
+// UnimplementedCategoryServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCategoryServiceServer struct {
 }
 
-func (UnimplementedCategorySeviceServer) CreateCategory(context.Context, *CreateCategoryRequest) (*Category, error) {
+func (UnimplementedCategoryServiceServer) CreateCategory(context.Context, *CreateCategoryRequest) (*Category, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
 }
-func (UnimplementedCategorySeviceServer) mustEmbedUnimplementedCategorySeviceServer() {}
+func (UnimplementedCategoryServiceServer) ListCategory(context.Context, *Blank) (*CategoryList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCategory not implemented")
+}
+func (UnimplementedCategoryServiceServer) mustEmbedUnimplementedCategoryServiceServer() {}
 
-// UnsafeCategorySeviceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CategorySeviceServer will
+// UnsafeCategoryServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CategoryServiceServer will
 // result in compilation errors.
-type UnsafeCategorySeviceServer interface {
-	mustEmbedUnimplementedCategorySeviceServer()
+type UnsafeCategoryServiceServer interface {
+	mustEmbedUnimplementedCategoryServiceServer()
 }
 
-func RegisterCategorySeviceServer(s grpc.ServiceRegistrar, srv CategorySeviceServer) {
-	s.RegisterService(&CategorySevice_ServiceDesc, srv)
+func RegisterCategoryServiceServer(s grpc.ServiceRegistrar, srv CategoryServiceServer) {
+	s.RegisterService(&CategoryService_ServiceDesc, srv)
 }
 
-func _CategorySevice_CreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CategoryService_CreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCategoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CategorySeviceServer).CreateCategory(ctx, in)
+		return srv.(CategoryServiceServer).CreateCategory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.CategorySevice/CreateCategory",
+		FullMethod: "/pb.CategoryService/CreateCategory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CategorySeviceServer).CreateCategory(ctx, req.(*CreateCategoryRequest))
+		return srv.(CategoryServiceServer).CreateCategory(ctx, req.(*CreateCategoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CategorySevice_ServiceDesc is the grpc.ServiceDesc for CategorySevice service.
+func _CategoryService_ListCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Blank)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).ListCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.CategoryService/ListCategory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).ListCategory(ctx, req.(*Blank))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// CategoryService_ServiceDesc is the grpc.ServiceDesc for CategoryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CategorySevice_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.CategorySevice",
-	HandlerType: (*CategorySeviceServer)(nil),
+var CategoryService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "pb.CategoryService",
+	HandlerType: (*CategoryServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateCategory",
-			Handler:    _CategorySevice_CreateCategory_Handler,
+			Handler:    _CategoryService_CreateCategory_Handler,
+		},
+		{
+			MethodName: "ListCategory",
+			Handler:    _CategoryService_ListCategory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

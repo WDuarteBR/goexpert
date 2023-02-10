@@ -23,9 +23,9 @@ func main() {
 	categoryDB := database.NewCategory(db)
 	categoryService := service.NewCategoryService(*categoryDB)
 
-	grpcServer := grpc.NewServer()                               // criei um servidor
-	pb.RegisterCategorySeviceServer(grpcServer, categoryService) // anexando o servico ao servidor
-	reflection.Register(grpcServer)                              // aqui fiz esse refection para realizar testes com evans
+	grpcServer := grpc.NewServer()                                // criei um servidor
+	pb.RegisterCategoryServiceServer(grpcServer, categoryService) // anexando o servico ao servidor
+	reflection.Register(grpcServer)                               // aqui fiz esse refection para realizar testes com evans
 
 	list, err := net.Listen("tcp", ":50051") // criando uma porta tcp
 	if err != nil {

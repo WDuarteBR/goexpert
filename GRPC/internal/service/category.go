@@ -8,7 +8,7 @@ import (
 )
 
 type CategoryService struct {
-	pb.UnimplementedCategorySeviceServer
+	pb.UnimplementedCategoryServiceServer
 	CategoryDB database.Category
 }
 
@@ -30,4 +30,23 @@ func (c *CategoryService) CreateCategory(ctx context.Context, in *pb.CreateCateg
 
 	return categoryResponse, nil
 
+}
+
+func (c *CategoryService) ListCategory(ctx context.Context, in *pb.Blank) (*pb.CategoryList, error) {
+	categories, err := c.CategoryDB.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var respCategories []*pb.Category
+	for _, cat := range categories {
+		category := &pb.Category{
+			Id:          cat.Id,
+			Name:        cat.Name,
+			Description: cat.Description,
+		}
+		respCategories = append(respCategories, category)
+	}
+
+	return &pb.CategoryList{Categories: respCategories}, nil
 }
