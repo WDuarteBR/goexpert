@@ -1,16 +1,29 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
+	"database/sql"
 	"os"
 
+	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/spf13/cobra"
+	"github.com/wduartebr/goexpert/cli/internal/database"
 )
 
+func GetDb() *sql.DB {
+	db, err := sql.Open("sqlite3", "./data.db")
+	if err != nil {
+		panic(err)
+	}
+	return db
+}
 
+func GetCategory(db *sql.DB) database.Category {
+	return *database.NewCategory(db)
+}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -37,15 +50,6 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cli.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }
-
-
