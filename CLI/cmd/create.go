@@ -5,30 +5,34 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/wduartebr/goexpert/cli/internal/database"
 )
 
-// createCmd represents the create command
-var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+func newCreateCommand(categoryDb database.Category) *cobra.Command {
+	return &cobra.Command{
+		Use:   "create",
+		Short: "Create new category",
+		Long:  "Create new category",
+		RunE:  runCreate(categoryDb),
+	}
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		db := GetDb()
-		category := GetCategory(db)
-
+func runCreate(category database.Category) RunEFunc {
+	return func(cmd *cobra.Command, args []string) error {
 		name, _ := cmd.Flags().GetString("name")
 		desc, _ := cmd.Flags().GetString("description")
 
-		category.Create(name, desc)
-	},
+		_, err := category.Create(name, desc)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
 }
 
 func init() {
+	createCmd := newCreateCommand(GetCategory(GetDb()))
 	categoryCmd.AddCommand(createCmd)
 	createCmd.Flags().StringP("name", "n", "", "Name of category")
 	createCmd.Flags().StringP("description", "d", "", "Description of category")
