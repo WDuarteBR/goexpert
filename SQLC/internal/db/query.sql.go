@@ -11,7 +11,7 @@ import (
 )
 
 const createCategory = `-- name: CreateCategory :exec
-INSERT INTO Categories (id, name,description)
+INSERT INTO categories (id, name,description)
 VALUES(?,?,?)
 `
 
@@ -27,7 +27,7 @@ func (q *Queries) CreateCategory(ctx context.Context, arg CreateCategoryParams) 
 }
 
 const deleteCategory = `-- name: DeleteCategory :exec
-DELETE FROM Categories WHERE id = ?
+DELETE FROM categories WHERE id = ?
 `
 
 func (q *Queries) DeleteCategory(ctx context.Context, id string) error {
@@ -36,7 +36,7 @@ func (q *Queries) DeleteCategory(ctx context.Context, id string) error {
 }
 
 const getCategory = `-- name: GetCategory :one
-SELECT id, name, description FROM Categories 
+SELECT id, name, description FROM categories 
 WHERE id = ?
 `
 
@@ -48,7 +48,7 @@ func (q *Queries) GetCategory(ctx context.Context, id string) (Category, error) 
 }
 
 const listCategories = `-- name: ListCategories :many
-SELECT id, name, description FROM Categories
+SELECT id, name, description FROM categories
 `
 
 func (q *Queries) ListCategories(ctx context.Context) ([]Category, error) {
@@ -75,7 +75,7 @@ func (q *Queries) ListCategories(ctx context.Context) ([]Category, error) {
 }
 
 const updateCategory = `-- name: UpdateCategory :exec
-UPDATE Categories SET name = ?, description = ?
+UPDATE categories SET name = ?, description = ?
 WHERE id = ?
 `
 

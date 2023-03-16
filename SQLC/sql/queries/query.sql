@@ -1,17 +1,17 @@
 -- name: ListCategories :many
-SELECT * FROM Categories;
+SELECT * FROM categories;
 
 -- name: GetCategory :one
-SELECT * FROM Categories 
+SELECT * FROM categories 
 WHERE id = ?;
 
 -- name: CreateCategory :exec
-INSERT INTO Categories (id, name,description)
+INSERT INTO categories (id, name,description)
 VALUES(?,?,?);
 
 -- name: UpdateCategory :exec
-UPDATE Categories SET name = ?, description = ?
+UPDATE categories SET name = ?, description = ?
 WHERE id = ?;
 
 -- name: DeleteCategory :exec
-DELETE FROM Categories WHERE id = ?;
+DELETE FROM categories WHERE id = ?;
