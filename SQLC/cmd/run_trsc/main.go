@@ -38,6 +38,49 @@ func (c *CousrseDB) callTx(ctx context.Context, fn func(*db.Queries) error) erro
 	return tx.Commit()
 }
 
+type CourseParams struct {
+	ID          string
+	Name        string
+	Description sql.NullString
+}
+
+type CategoryParams struct {
+	ID          string
+	Name        string
+	Description sql.NullString
+}
+
+func (c *CousrseDB) CreateCourseAndCategory(cxt context.Context, argsCourse CourseParams, argsCategory CategoryParams) error {
+	err := c.callTx(cxt, func(q *db.Queries) error {
+		var err error
+		err = q.CreateCategory(cxt, db.CreateCategoryParams{
+			ID:          argsCategory.ID,
+			Name:        argsCategory.Name,
+			Description: argsCategory.Description,
+		})
+		if err != nil {
+			return err
+		}
+
+		err = q.CreateCourse(cxt, db.CreateCourseParams{
+			ID:          argsCourse.ID,
+			Name:        argsCourse.Name,
+			Description: argsCourse.Description,
+			CategoryID:  argsCategory.ID,
+		})
+
+		if err != nil {
+			return err
+		}
+
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 func main() {
 	ctx := context.Background()
 	dbcnn, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/courses")
