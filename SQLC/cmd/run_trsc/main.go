@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
 	"github.com/wduartebr/goexpert/sqlc/internal/db"
 )
 
@@ -95,25 +94,36 @@ func main() {
 
 	defer dbcnn.Close()
 
-	// queries := db.New(dbcnn)
+	queries := db.New(dbcnn)
 
-	courseArgs := CourseParams{
-		ID:          uuid.New().String(),
-		Name:        "Go the best",
-		Description: sql.NullString{String: "Go language", Valid: true},
-		Price:       29.99,
-	}
-
-	categoryArgs := CategoryParams{
-		ID:          uuid.New().String(),
-		Name:        "Program language",
-		Description: sql.NullString{String: "Most performance language", Valid: true},
-	}
-
-	courseDb := NewCourseDB(dbcnn)
-	err = courseDb.CreateCourseAndCategory(ctx, courseArgs, categoryArgs)
+	courses, err := queries.ListCourse(ctx)
 	if err != nil {
 		panic(err)
 	}
+
+	for _, course := range courses {
+		fmt.Printf("Category: %s, Name: %s, Description: %s, Price: %f",
+			course.CategoryName, course.Name, course.Description.String, course.Price)
+
+	}
+
+	// courseArgs := CourseParams{
+	// 	ID:          uuid.New().String(),
+	// 	Name:        "Go the best",
+	// 	Description: sql.NullString{String: "Go language", Valid: true},
+	// 	Price:       29.99,
+	// }
+
+	// categoryArgs := CategoryParams{
+	// 	ID:          uuid.New().String(),
+	// 	Name:        "Program language",
+	// 	Description: sql.NullString{String: "Most performance language", Valid: true},
+	// }
+
+	// courseDb := NewCourseDB(dbcnn)
+	// err = courseDb.CreateCourseAndCategory(ctx, courseArgs, categoryArgs)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 }
