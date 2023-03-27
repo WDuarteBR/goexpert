@@ -19,5 +19,5 @@ type Course struct {
 	Name        string
 	CategoryID  string
 	Description sql.NullString
-	Price       string
+	Price       float64
 }
