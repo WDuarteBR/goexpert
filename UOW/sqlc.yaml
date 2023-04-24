@@ -1,0 +1,10 @@
+version: "2"
+sql:
+- schema: "sql/schema.sql"
+  queries: "sql/queries.sql"
+  engine: "mysql"
+  gen:
+    go:
+      package: "db"
+      out: "internal/db"
+      overrides:
