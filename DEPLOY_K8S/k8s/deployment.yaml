@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: wsdsilva/deploy-k8s:latest
+        resources:
+          limits:
+            memory: "32Mi"
+            cpu: "100m"
+
+        #Vrf se o container iniciou corretamente
+        startupProbe:
+          httpGet:
+            path: /
+            port: 8080
+          #vrf a cada 10 segundos
+          periodSeconds: 10
+          #limite de falhas
+          failureThreshold: 10
+        
+        #vrf o tempo inteiro 
+        #caso a aplicação não esteja pronta
+        #o service não enviará trafego para o pod
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          #vrf, nesse caso, a cada 10 segundos
+          periodSeconds: 10
+          #nesse caso realiza 3 tentativas
+          failureThreshold: 3
+          #espera 5 segundos, nesse caso
+          timeoutSeconds: 5
+        #vrf se o pod está de pé
+        #em caso de falha ele recria
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 2
+          timeoutSeconds: 5
+          #número de tentativas para 
+          #aceitar como sucesso 
+          successThreshold: 1
+
+
+
+          
+          
+        ports:
+        - containerPort: 8080
+        
